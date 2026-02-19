@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Equity Market News</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <h1>US Equity Market News</h1>
+            <div class="header-controls">
+                <input type="text" id="search-box" placeholder="Search headlines or ticker...">
+                <select id="freshness-select">
+                    <option value="pd" selected>Past 24 hours</option>
+                    <option value="pw">Past week</option>
+                    <option value="pm">Past month</option>
+                </select>
+                <button id="refresh-btn" title="Refresh">&#x21bb; Refresh</button>
+                <label class="auto-refresh-toggle" title="Auto-refresh every 5 min">
+                    <input type="checkbox" id="auto-refresh-cb">
+                    Auto
+                </label>
+            </div>
+        </div>
+        <div id="ticker-bar" class="ticker-bar"></div>
+    </header>
+
+    <main>
+        <div id="status" class="status"></div>
+        <div id="news-grid" class="news-grid"></div>
+    </main>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
