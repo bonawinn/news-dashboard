@@ -3,35 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US Equity Market News</title>
+    <title>Alpha Terminal</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <header>
-        <div class="header-top">
-            <h1>US Equity Market News</h1>
-            <div class="header-controls">
-                <input type="text" id="search-box" placeholder="Search headlines or ticker...">
-                <select id="freshness-select">
-                    <option value="pd" selected>Past 24 hours</option>
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-brand">
+            <span class="brand-icon">&#x25C8;</span>
+            <span class="brand-text">Alpha Terminal</span>
+        </div>
+        <ul class="sidebar-nav">
+            <li><button class="nav-btn active" data-section="news"><span class="nav-icon">&#x2139;</span> News &amp; Sentiment</button></li>
+            <li><button class="nav-btn" data-section="financials"><span class="nav-icon">&#x2261;</span> Financials</button></li>
+            <li><button class="nav-btn" data-section="screener"><span class="nav-icon">&#x25A3;</span> Screener</button></li>
+            <li><button class="nav-btn" data-section="insiders"><span class="nav-icon">&#x2302;</span> Insiders</button></li>
+            <li><button class="nav-btn" data-section="macro"><span class="nav-icon">&#x2616;</span> Macro</button></li>
+            <li><button class="nav-btn" data-section="alerts"><span class="nav-icon">&#x266A;</span> Alerts</button></li>
+        </ul>
+        <div class="sidebar-footer">
+            <span class="version">v1.0</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="main-content" class="main-content">
+        <!-- Header -->
+        <header id="main-header" class="main-header">
+            <button id="sidebar-toggle" class="sidebar-toggle" title="Toggle sidebar">&#x2630;</button>
+            <h1 id="section-title" class="section-title">News & Sentiment</h1>
+            <div id="header-controls" class="header-controls"></div>
+        </header>
+
+        <!-- Section containers (only one visible at a time) -->
+        <section id="section-news" class="section active">
+            <div class="section-toolbar">
+                <input type="text" id="news-search" class="input" placeholder="Search headlines or ticker...">
+                <select id="news-freshness" class="select">
+                    <option value="pd" selected>Past 24h</option>
                     <option value="pw">Past week</option>
                     <option value="pm">Past month</option>
                 </select>
-                <button id="refresh-btn" title="Refresh">&#x21bb; Refresh</button>
-                <label class="auto-refresh-toggle" title="Auto-refresh every 5 min">
-                    <input type="checkbox" id="auto-refresh-cb">
-                    Auto
+                <button id="news-refresh" class="btn btn-primary">&#x21bb; Refresh</button>
+                <label class="toggle-label">
+                    <input type="checkbox" id="news-auto-refresh"> Auto
                 </label>
             </div>
-        </div>
-        <div id="ticker-bar" class="ticker-bar"></div>
-    </header>
+            <div id="news-sentiment-bar" class="sentiment-bar"></div>
+            <div id="news-source-filters" class="source-filters"></div>
+            <div id="news-status" class="status-msg"></div>
+            <ul id="news-list" class="news-list"></ul>
+        </section>
 
-    <main>
-        <div id="status" class="status"></div>
-        <div id="news-grid" class="news-grid"></div>
-    </main>
+        <section id="section-financials" class="section">
+            <div class="section-toolbar">
+                <input type="text" id="fin-ticker" class="input" placeholder="Enter ticker (e.g. NVDA)...">
+                <button id="fin-lookup" class="btn btn-primary">Lookup</button>
+                <input type="text" id="fin-compare" class="input" placeholder="Compare (e.g. NVDA,AAPL)...">
+                <button id="fin-compare-btn" class="btn">Compare</button>
+            </div>
+            <div id="fin-status" class="status-msg"></div>
+            <div id="fin-content" class="fin-content"></div>
+        </section>
 
+        <section id="section-screener" class="section">
+            <div class="section-toolbar">
+                <select id="screener-template" class="select">
+                    <option value="">Custom Filters</option>
+                </select>
+                <button id="screener-run" class="btn btn-primary">Run Screen</button>
+            </div>
+            <div id="screener-filters" class="screener-filters"></div>
+            <div id="screener-status" class="status-msg"></div>
+            <div id="screener-results" class="screener-results"></div>
+        </section>
+
+        <section id="section-insiders" class="section">
+            <div class="section-toolbar">
+                <input type="text" id="insider-ticker" class="input" placeholder="Ticker (blank = all clusters)...">
+                <select id="insider-days" class="select">
+                    <option value="30">30 days</option>
+                    <option value="60">60 days</option>
+                    <option value="90" selected>90 days</option>
+                    <option value="180">180 days</option>
+                </select>
+                <button id="insider-search" class="btn btn-primary">Search</button>
+                <button id="insider-clusters" class="btn">Clusters</button>
+            </div>
+            <div id="insider-status" class="status-msg"></div>
+            <div id="insider-content" class="insider-content"></div>
+        </section>
+
+        <section id="section-macro" class="section">
+            <div id="macro-status" class="status-msg"></div>
+            <div id="macro-content" class="macro-content"></div>
+        </section>
+
+        <section id="section-alerts" class="section">
+            <div class="section-toolbar">
+                <button id="alert-create" class="btn btn-primary">+ New Alert</button>
+                <button id="alert-test-tg" class="btn">Test Telegram</button>
+            </div>
+            <div id="alert-status" class="status-msg"></div>
+            <div id="alert-content" class="alert-content"></div>
+        </section>
+    </div>
+
+    <!-- JS modules -->
+    <script src="/static/js/modules/utils.js"></script>
+    <script src="/static/js/modules/news.js"></script>
+    <script src="/static/js/modules/financials.js"></script>
+    <script src="/static/js/modules/screener.js"></script>
+    <script src="/static/js/modules/insiders.js"></script>
+    <script src="/static/js/modules/macro.js"></script>
+    <script src="/static/js/modules/alerts.js"></script>
     <script src="/static/js/dashboard.js"></script>
 </body>
 </html>

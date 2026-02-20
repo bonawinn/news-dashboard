@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0f1118;
+  --color-surface: #1a1d2e;
+  --color-surface-hover: #232740;
+  --color-border: #2a2e45;
+  --color-text: #e4e6f0;
+  --color-text-muted: #8b8fa8;
+  --color-accent: #6c8cff;
+  --color-accent-dim: rgba(108, 140, 255, 0.15);
+  --color-green: #34d399;
+  --color-red: #f87171;
+  --color-yellow: #fbbf24;
+  --color-green-bg: rgba(52, 211, 153, 0.12);
+  --color-red-bg: rgba(248, 113, 113, 0.12);
+
+  --font-mono: "SF Mono", "Fira Code", "Cascadia Code", Menlo, Consolas, monospace;
+}
+
+/* Base reset & body */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-mono);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+#root {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Spinner animation */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
