@@ -84,7 +84,7 @@ export function MacroPage() {
       {/* Recession gauge */}
       {recession && recession.probability !== undefined && (
         <div className="flex flex-col items-center mb-5">
-          <div className="text-[0.8rem] font-bold text-text-muted mb-1.5 uppercase tracking-wider">
+          <div className="text-[0.8rem] font-semibold text-text-muted mb-1.5 uppercase tracking-wider">
             Recession Probability
           </div>
           <GaugeSVG value={recession.probability} size={140} />
@@ -97,10 +97,10 @@ export function MacroPage() {
       )}
 
       {/* Categories grid */}
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-3.5 max-md:grid-cols-1">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-4 max-md:grid-cols-1">
         {Object.entries(categories).map(([catKey, cat]) => (
-          <div key={catKey} className="bg-surface border border-border rounded-lg p-3.5">
-            <div className="text-[0.78rem] font-bold uppercase tracking-wider text-accent mb-2.5 pb-1.5 border-b border-border">
+          <div key={catKey} className="card-gradient border border-border rounded-[14px] p-4 shadow-[0_12px_30px_rgba(0,0,0,0.45)]">
+            <div className="text-[0.78rem] font-semibold uppercase tracking-wider text-accent mb-2.5 pb-1.5 border-b border-border">
               {cat.name || catKey}
             </div>
             {(cat.indicators || []).map((ind, ii) => (
@@ -109,7 +109,7 @@ export function MacroPage() {
                 className="flex justify-between items-center py-1.5 border-b border-border/50 last:border-b-0"
               >
                 <span className="text-[0.78rem] text-text-muted">{ind.name}</span>
-                <span className="flex items-center">
+                <span className="flex items-center font-mono">
                   <span className="text-[0.85rem] font-bold">{formatNumber(ind.value)}</span>
                   {ind.change !== undefined && (
                     <span className={`text-[0.72rem] ml-1.5 ${colorClass(ind.change)}`}>

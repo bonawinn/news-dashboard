@@ -110,12 +110,12 @@ export function NewsPage() {
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Search headlines or ticker..."
-          className="px-3 py-1.5 rounded-md border border-border bg-bg text-text font-mono text-[0.82rem] placeholder:text-text-muted focus:outline-none focus:border-accent"
+          className="px-3 py-1.5 rounded-lg border border-border bg-bg text-text font-mono text-[0.82rem] placeholder:text-text-muted focus:outline-none focus:border-accent"
         />
         <select
           value={freshness}
           onChange={(e) => { setFreshness(e.target.value); }}
-          className="px-3 py-1.5 rounded-md border border-border bg-bg text-text font-mono text-[0.82rem] focus:outline-none focus:border-accent"
+          className="px-3 py-1.5 rounded-lg border border-border bg-bg text-text text-[0.82rem] focus:outline-none focus:border-accent"
         >
           <option value="pd">Past 24h</option>
           <option value="pw">Past week</option>
@@ -124,7 +124,7 @@ export function NewsPage() {
         <button
           onClick={doFetch}
           disabled={loading}
-          className="px-3.5 py-1.5 rounded-md border border-accent bg-accent text-white font-mono text-[0.82rem] font-semibold cursor-pointer hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3.5 py-1.5 rounded-lg border border-accent bg-accent text-bg text-[0.82rem] font-semibold cursor-pointer hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           &#x21bb; Refresh
         </button>
@@ -133,6 +133,7 @@ export function NewsPage() {
             type="checkbox"
             checked={autoRefresh}
             onChange={(e) => setAutoRefresh(e.target.checked)}
+            className="accent-accent"
           />
           Auto
         </label>
@@ -140,13 +141,13 @@ export function NewsPage() {
 
       {/* Sentiment bar */}
       {showSentiment && (
-        <div className="bg-surface border border-border rounded-lg px-3.5 py-2.5 mb-3 flex items-center gap-3">
+        <div className="card-gradient border border-border rounded-[14px] px-4 py-3 mb-3 flex items-center gap-3 shadow-[0_12px_30px_rgba(0,0,0,0.45)]">
           <div className="flex gap-3 text-[0.75rem] font-semibold">
             <span className="text-green">{sentimentCounts.bull} Bull</span>
             <span className="text-text-muted">{sentimentCounts.neut} Neutral</span>
             <span className="text-red">{sentimentCounts.bear} Bear</span>
           </div>
-          <div className="flex-1 h-1.5 bg-border rounded-sm overflow-hidden flex">
+          <div className="flex-1 h-1.5 bg-border rounded-full overflow-hidden flex">
             <div className="bg-green h-full transition-[width] duration-300" style={{ width: `${bullPct}%` }} />
             <div className="bg-text-muted h-full transition-[width] duration-300" style={{ width: `${neutPct}%` }} />
             <div className="bg-red h-full transition-[width] duration-300" style={{ width: `${bearPct}%` }} />
@@ -156,16 +157,16 @@ export function NewsPage() {
 
       {/* Source filters */}
       {sources.length > 0 && (
-        <div className="bg-surface border border-border rounded-lg px-3.5 py-2.5 mb-3">
-          <span className="block text-[0.68rem] font-bold uppercase tracking-wider text-text-muted mb-1.5">
+        <div className="card-gradient border border-border rounded-[14px] px-4 py-3 mb-3">
+          <span className="block text-[0.68rem] font-semibold uppercase tracking-wider text-text-muted mb-1.5">
             Filter by source
           </span>
           <div className="flex flex-wrap gap-1.5">
             <button
               onClick={() => setActiveSource(null)}
-              className={`px-2.5 py-0.5 rounded text-[0.72rem] font-semibold cursor-pointer transition-all border font-mono ${
+              className={`px-2.5 py-0.5 rounded-lg text-[0.72rem] font-semibold cursor-pointer transition-all border ${
                 !activeSource
-                  ? 'bg-accent border-accent text-white'
+                  ? 'bg-accent border-accent text-bg'
                   : 'bg-bg border-border text-text-muted hover:border-accent hover:text-text'
               }`}
             >
@@ -175,9 +176,9 @@ export function NewsPage() {
               <button
                 key={s}
                 onClick={() => setActiveSource(activeSource === s ? null : s)}
-                className={`px-2.5 py-0.5 rounded text-[0.72rem] font-semibold cursor-pointer transition-all border font-mono ${
+                className={`px-2.5 py-0.5 rounded-lg text-[0.72rem] font-semibold cursor-pointer transition-all border ${
                   activeSource === s
-                    ? 'bg-accent border-accent text-white'
+                    ? 'bg-accent border-accent text-bg'
                     : 'bg-bg border-border text-text-muted hover:border-accent hover:text-text'
                 }`}
               >
@@ -209,7 +210,7 @@ export function NewsPage() {
         {visible.map((art, i) => (
           <li
             key={art.url + i}
-            className="group flex items-baseline gap-2 px-2.5 py-[7px] border-b border-border relative hover:bg-surface-hover"
+            className="group flex items-baseline gap-2 px-3 py-[7px] border-b border-border relative hover:bg-surface-hover transition-colors"
           >
             <span className="shrink-0 text-[0.7rem] font-bold text-accent w-[110px] overflow-hidden text-ellipsis whitespace-nowrap">
               {art.source || ''}
@@ -219,19 +220,19 @@ export function NewsPage() {
                 href={art.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text no-underline font-semibold text-[0.84rem] leading-[1.4] whitespace-nowrap overflow-hidden text-ellipsis block hover:text-accent"
+                className="text-text no-underline font-semibold text-[0.84rem] leading-[1.4] whitespace-nowrap overflow-hidden text-ellipsis block hover:text-accent transition-colors"
               >
                 {art.title}
               </a>
             </span>
             {art.sentiment && <SentimentBadge sentiment={art.sentiment} />}
             {art.age && (
-              <span className="shrink-0 text-[0.7rem] text-text-muted whitespace-nowrap">
+              <span className="shrink-0 text-[0.7rem] text-text-muted whitespace-nowrap font-mono">
                 {art.age}
               </span>
             )}
             {art.description && (
-              <div className="hidden group-hover:block absolute left-2.5 top-full z-50 max-w-[440px] px-3 py-2 rounded-md bg-surface border border-border text-text-muted text-[0.78rem] leading-relaxed shadow-[0_8px_24px_rgba(0,0,0,0.5)] pointer-events-none whitespace-normal">
+              <div className="hidden group-hover:block absolute left-2.5 top-full z-50 max-w-[440px] px-3 py-2 rounded-[14px] card-gradient border border-border text-text-muted text-[0.78rem] leading-relaxed shadow-[0_12px_30px_rgba(0,0,0,0.45)] pointer-events-none whitespace-normal">
                 {art.description}
               </div>
             )}

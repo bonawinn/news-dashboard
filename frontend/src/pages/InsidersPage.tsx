@@ -77,12 +77,12 @@ export function InsidersPage() {
           onChange={(e) => setTicker(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') searchTrades() }}
           placeholder="Ticker (blank = all clusters)..."
-          className="px-3 py-1.5 rounded-md border border-border bg-bg text-text font-mono text-[0.82rem] placeholder:text-text-muted focus:outline-none focus:border-accent"
+          className="px-3 py-1.5 rounded-lg border border-border bg-bg text-text font-mono text-[0.82rem] placeholder:text-text-muted focus:outline-none focus:border-accent"
         />
         <select
           value={days}
           onChange={(e) => setDays(e.target.value)}
-          className="px-3 py-1.5 rounded-md border border-border bg-bg text-text font-mono text-[0.82rem] focus:outline-none focus:border-accent"
+          className="px-3 py-1.5 rounded-lg border border-border bg-bg text-text text-[0.82rem] focus:outline-none focus:border-accent"
         >
           <option value="30">30 days</option>
           <option value="60">60 days</option>
@@ -92,14 +92,14 @@ export function InsidersPage() {
         <button
           onClick={searchTrades}
           disabled={loading}
-          className="px-3.5 py-1.5 rounded-md border border-accent bg-accent text-white font-mono text-[0.82rem] font-semibold cursor-pointer hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3.5 py-1.5 rounded-lg border border-accent bg-accent text-bg text-[0.82rem] font-semibold cursor-pointer hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Search
         </button>
         <button
           onClick={fetchClusters}
           disabled={loading}
-          className="px-3.5 py-1.5 rounded-md border border-border bg-surface text-text font-mono text-[0.82rem] font-semibold cursor-pointer hover:bg-surface-hover hover:border-accent disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3.5 py-1.5 rounded-lg border border-border bg-surface text-text text-[0.82rem] font-semibold cursor-pointer hover:bg-surface-hover hover:border-accent disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Clusters
         </button>
@@ -122,11 +122,11 @@ export function InsidersPage() {
 
       {/* Trades table */}
       {!loading && trades !== null && trades.length > 0 && (
-        <table className="w-full border-collapse text-[0.82rem]">
+        <table className="w-full border-collapse text-[0.82rem] font-mono">
           <thead>
             <tr>
               {['Date', 'Ticker', 'Insider', 'Title', 'Type', 'Shares', 'Price', 'Value'].map((h) => (
-                <th key={h} className="text-left px-3 py-2 border-b-2 border-border text-text-muted font-bold text-[0.72rem] uppercase tracking-wider">
+                <th key={h} className="text-left px-3 py-2 border-b border-border text-text-muted font-semibold text-[0.72rem] uppercase tracking-wider font-sans">
                   {h}
                 </th>
               ))}
@@ -134,11 +134,11 @@ export function InsidersPage() {
           </thead>
           <tbody>
             {trades.map((t, i) => (
-              <tr key={i} className="hover:[&>td]:bg-surface-hover">
+              <tr key={i} className="hover:[&>td]:bg-surface-hover transition-colors">
                 <td className="px-3 py-1.5 border-b border-border whitespace-nowrap">{t.filing_date || ''}</td>
-                <td className="px-3 py-1.5 border-b border-border whitespace-nowrap text-accent">{t.ticker || ''}</td>
-                <td className="px-3 py-1.5 border-b border-border whitespace-nowrap">{t.insider_name || ''}</td>
-                <td className="px-3 py-1.5 border-b border-border whitespace-nowrap text-text-muted">{t.title || ''}</td>
+                <td className="px-3 py-1.5 border-b border-border whitespace-nowrap text-accent font-semibold">{t.ticker || ''}</td>
+                <td className="px-3 py-1.5 border-b border-border whitespace-nowrap font-sans">{t.insider_name || ''}</td>
+                <td className="px-3 py-1.5 border-b border-border whitespace-nowrap text-text-muted font-sans">{t.title || ''}</td>
                 <td className={`px-3 py-1.5 border-b border-border whitespace-nowrap ${isBuy(t.trade_type || '') ? 'text-green' : 'text-red'}`}>
                   {t.trade_type || ''}
                 </td>
@@ -158,18 +158,18 @@ export function InsidersPage() {
       {!loading && clusters !== null && clusters.length > 0 && (
         <div>
           {clusters.map((c, ci) => (
-            <div key={ci} className="bg-surface border border-border rounded-lg p-3.5 mb-2.5">
+            <div key={ci} className="card-gradient border border-border rounded-[14px] p-4 mb-3 shadow-[0_12px_30px_rgba(0,0,0,0.45)]">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-base font-bold text-accent">{c.ticker}</span>
-                <span className="text-[0.75rem] bg-green-bg text-green px-2 py-0.5 rounded font-bold">
+                <span className="text-[0.75rem] bg-green-bg text-green px-2.5 py-0.5 rounded-full font-bold">
                   {c.insider_count} insiders buying
                 </span>
               </div>
-              <table className="w-full border-collapse text-[0.82rem]">
+              <table className="w-full border-collapse text-[0.82rem] font-mono">
                 <thead>
                   <tr>
                     {['Insider', 'Date', 'Shares', 'Value'].map((h) => (
-                      <th key={h} className="text-left px-3 py-2 border-b-2 border-border text-text-muted font-bold text-[0.72rem] uppercase tracking-wider">
+                      <th key={h} className="text-left px-3 py-2 border-b border-border text-text-muted font-semibold text-[0.72rem] uppercase tracking-wider font-sans">
                         {h}
                       </th>
                     ))}
@@ -177,8 +177,8 @@ export function InsidersPage() {
                 </thead>
                 <tbody>
                   {(c.trades || []).map((t, ti) => (
-                    <tr key={ti} className="hover:[&>td]:bg-surface-hover">
-                      <td className="px-3 py-1.5 border-b border-border whitespace-nowrap">{t.insider_name || ''}</td>
+                    <tr key={ti} className="hover:[&>td]:bg-surface-hover transition-colors">
+                      <td className="px-3 py-1.5 border-b border-border whitespace-nowrap font-sans">{t.insider_name || ''}</td>
                       <td className="px-3 py-1.5 border-b border-border whitespace-nowrap">{t.filing_date || ''}</td>
                       <td className="px-3 py-1.5 border-b border-border whitespace-nowrap">{formatNumber(t.shares, 0)}</td>
                       <td className="px-3 py-1.5 border-b border-border whitespace-nowrap">{formatUSD(t.value)}</td>

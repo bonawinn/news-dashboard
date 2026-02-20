@@ -5,10 +5,10 @@ interface Props {
 
 export function Header({ title, onToggleSidebar }: Props) {
   return (
-    <header className="sticky top-0 z-[100] bg-surface border-b border-border px-5 py-3 flex items-center gap-3">
+    <header className="sticky top-0 z-[100] bg-bg/80 backdrop-blur-xl border-b border-border px-5 py-3 flex items-center gap-3">
       <button
         onClick={onToggleSidebar}
-        className="bg-transparent border border-border rounded-md text-text-muted text-[1.1rem] px-2 py-1 cursor-pointer hover:text-text"
+        className="bg-transparent border border-border rounded-lg text-text-muted text-[1.1rem] px-2 py-1 cursor-pointer hover:text-text hover:border-accent/30 transition-colors"
         title="Toggle sidebar"
       >
         &#x2630;

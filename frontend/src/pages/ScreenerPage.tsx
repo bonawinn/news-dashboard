@@ -23,7 +23,7 @@ const FILTER_DEFS: FilterDef[] = [
 ]
 
 const COLUMNS: Column<ScreenerRow>[] = [
-  { key: 'ticker', label: 'Ticker', type: 'str', render: (r) => <span className="text-accent">{r.ticker}</span> },
+  { key: 'ticker', label: 'Ticker', type: 'str', render: (r) => <span className="text-accent font-semibold">{r.ticker}</span> },
   { key: 'name', label: 'Name', type: 'str' },
   { key: 'price', label: 'Price', type: 'num', render: (r) => <>{formatNumber(r.price)}</> },
   { key: 'pe_ratio', label: 'P/E', type: 'num', render: (r) => <span className={colorClass(r.pe_ratio)}>{formatNumber(r.pe_ratio)}</span> },
@@ -105,7 +105,7 @@ export function ScreenerPage() {
         <select
           value={selectedTemplate}
           onChange={(e) => handleTemplateChange(e.target.value)}
-          className="px-3 py-1.5 rounded-md border border-border bg-bg text-text font-mono text-[0.82rem] focus:outline-none focus:border-accent"
+          className="px-3 py-1.5 rounded-lg border border-border bg-bg text-text text-[0.82rem] focus:outline-none focus:border-accent"
         >
           <option value="">Custom Filters</option>
           {Object.entries(templates).map(([key, tpl]) => (
@@ -115,7 +115,7 @@ export function ScreenerPage() {
         <button
           onClick={doRun}
           disabled={loading}
-          className="px-3.5 py-1.5 rounded-md border border-accent bg-accent text-white font-mono text-[0.82rem] font-semibold cursor-pointer hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3.5 py-1.5 rounded-lg border border-accent bg-accent text-bg text-[0.82rem] font-semibold cursor-pointer hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Run Screen
         </button>

@@ -93,12 +93,12 @@ export function FinancialsPage() {
           onChange={(e) => setTicker(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') doLookup() }}
           placeholder="Enter ticker (e.g. NVDA)..."
-          className="px-3 py-1.5 rounded-md border border-border bg-bg text-text font-mono text-[0.82rem] placeholder:text-text-muted focus:outline-none focus:border-accent"
+          className="px-3 py-1.5 rounded-lg border border-border bg-bg text-text font-mono text-[0.82rem] placeholder:text-text-muted focus:outline-none focus:border-accent"
         />
         <button
           onClick={doLookup}
           disabled={loading}
-          className="px-3.5 py-1.5 rounded-md border border-accent bg-accent text-white font-mono text-[0.82rem] font-semibold cursor-pointer hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3.5 py-1.5 rounded-lg border border-accent bg-accent text-bg text-[0.82rem] font-semibold cursor-pointer hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Lookup
         </button>
@@ -108,12 +108,12 @@ export function FinancialsPage() {
           onChange={(e) => setCompareTickers(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') doCompare() }}
           placeholder="Compare (e.g. NVDA,AAPL)..."
-          className="px-3 py-1.5 rounded-md border border-border bg-bg text-text font-mono text-[0.82rem] placeholder:text-text-muted focus:outline-none focus:border-accent"
+          className="px-3 py-1.5 rounded-lg border border-border bg-bg text-text font-mono text-[0.82rem] placeholder:text-text-muted focus:outline-none focus:border-accent"
         />
         <button
           onClick={doCompare}
           disabled={loading}
-          className="px-3.5 py-1.5 rounded-md border border-border bg-surface text-text font-mono text-[0.82rem] font-semibold cursor-pointer hover:bg-surface-hover hover:border-accent disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-3.5 py-1.5 rounded-lg border border-border bg-surface text-text text-[0.82rem] font-semibold cursor-pointer hover:bg-surface-hover hover:border-accent disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Compare
         </button>
@@ -167,20 +167,20 @@ function StatementTable({ data }: { data?: StatementData }) {
   const entries = Object.entries(data).filter(([k]) => k !== '_years')
 
   return (
-    <table className="w-full border-collapse text-[0.82rem]">
+    <table className="w-full border-collapse text-[0.82rem] font-mono">
       <thead>
         <tr>
-          <th className="text-left px-3 py-2 border-b-2 border-border text-text-muted font-bold text-[0.72rem] uppercase tracking-wider">
+          <th className="text-left px-3 py-2 border-b border-border text-text-muted font-semibold text-[0.72rem] uppercase tracking-wider font-sans">
             Item
           </th>
           {years.length > 0
             ? years.map((y) => (
-                <th key={y} className="text-left px-3 py-2 border-b-2 border-border text-text-muted font-bold text-[0.72rem] uppercase tracking-wider">
+                <th key={y} className="text-left px-3 py-2 border-b border-border text-text-muted font-semibold text-[0.72rem] uppercase tracking-wider font-sans">
                   {y}
                 </th>
               ))
             : (
-                <th className="text-left px-3 py-2 border-b-2 border-border text-text-muted font-bold text-[0.72rem] uppercase tracking-wider">
+                <th className="text-left px-3 py-2 border-b border-border text-text-muted font-semibold text-[0.72rem] uppercase tracking-wider font-sans">
                   Value
                 </th>
               )}
@@ -188,8 +188,8 @@ function StatementTable({ data }: { data?: StatementData }) {
       </thead>
       <tbody>
         {entries.map(([key, val]) => (
-          <tr key={key} className="hover:[&>td]:bg-surface-hover">
-            <td className="px-3 py-1.5 border-b border-border whitespace-nowrap">{key}</td>
+          <tr key={key} className="hover:[&>td]:bg-surface-hover transition-colors">
+            <td className="px-3 py-1.5 border-b border-border whitespace-nowrap font-sans">{key}</td>
             {Array.isArray(val)
               ? (val as number[]).map((v, i) => (
                   <td key={i} className={`px-3 py-1.5 border-b border-border whitespace-nowrap ${colorClass(v)}`}>
@@ -213,14 +213,14 @@ function ComparisonTable({ data }: { data: CompareResponse }) {
   if (!companies.length) return <p className="text-text-muted">No data</p>
 
   return (
-    <table className="w-full border-collapse text-[0.82rem]">
+    <table className="w-full border-collapse text-[0.82rem] font-mono">
       <thead>
         <tr>
-          <th className="text-left px-3 py-2 border-b-2 border-border text-text-muted font-bold text-[0.72rem] uppercase tracking-wider">
+          <th className="text-left px-3 py-2 border-b border-border text-text-muted font-semibold text-[0.72rem] uppercase tracking-wider font-sans">
             Metric
           </th>
           {companies.map((c) => (
-            <th key={c.ticker} className="text-left px-3 py-2 border-b-2 border-border text-text-muted font-bold text-[0.72rem] uppercase tracking-wider">
+            <th key={c.ticker} className="text-left px-3 py-2 border-b border-border text-text-muted font-semibold text-[0.72rem] uppercase tracking-wider font-sans">
               {c.ticker}
             </th>
           ))}
@@ -230,8 +230,8 @@ function ComparisonTable({ data }: { data: CompareResponse }) {
         {COMPARE_KEYS.map((key) => {
           const label = key.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
           return (
-            <tr key={key} className="hover:[&>td]:bg-surface-hover">
-              <td className="px-3 py-1.5 border-b border-border whitespace-nowrap">{label}</td>
+            <tr key={key} className="hover:[&>td]:bg-surface-hover transition-colors">
+              <td className="px-3 py-1.5 border-b border-border whitespace-nowrap font-sans">{label}</td>
               {companies.map((c) => {
                 const v = (c.metrics as Record<string, number | undefined>)[key]
                 return (

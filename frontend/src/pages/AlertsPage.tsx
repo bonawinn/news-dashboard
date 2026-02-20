@@ -70,13 +70,13 @@ export function AlertsPage() {
       <div className="flex items-center gap-2 flex-wrap mb-4">
         <button
           onClick={() => setModalOpen(true)}
-          className="px-3.5 py-1.5 rounded-md border border-accent bg-accent text-white font-mono text-[0.82rem] font-semibold cursor-pointer hover:opacity-85"
+          className="px-3.5 py-1.5 rounded-lg border border-accent bg-accent text-bg text-[0.82rem] font-semibold cursor-pointer hover:opacity-85"
         >
           + New Alert
         </button>
         <button
           onClick={handleTestTelegram}
-          className="px-3.5 py-1.5 rounded-md border border-border bg-surface text-text font-mono text-[0.82rem] font-semibold cursor-pointer hover:bg-surface-hover hover:border-accent"
+          className="px-3.5 py-1.5 rounded-lg border border-border bg-surface text-text text-[0.82rem] font-semibold cursor-pointer hover:bg-surface-hover hover:border-accent"
         >
           Test Telegram
         </button>
@@ -93,7 +93,7 @@ export function AlertsPage() {
         </p>
       ) : (
         alerts.map((a) => (
-          <div key={a.id} className="bg-surface border border-border rounded-lg p-3.5 mb-2 flex justify-between items-center">
+          <div key={a.id} className="card-gradient border border-border rounded-[14px] p-4 mb-3 flex justify-between items-center shadow-[0_12px_30px_rgba(0,0,0,0.45)]">
             <div className="flex-1">
               <div className="font-bold text-[0.88rem] mb-0.5">{a.name}</div>
               <div className="text-[0.72rem] text-text-muted">
@@ -106,7 +106,7 @@ export function AlertsPage() {
             </div>
             <button
               onClick={() => handleDelete(a.id)}
-              className="px-3 py-1 rounded-md border border-red bg-red text-white font-mono text-[0.82rem] font-semibold cursor-pointer hover:opacity-85"
+              className="px-3 py-1 rounded-lg border border-red bg-red-bg text-red text-[0.82rem] font-semibold cursor-pointer hover:bg-red hover:text-white transition-colors"
             >
               Delete
             </button>
@@ -171,7 +171,7 @@ function CreateAlertModal({
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. NVDA Insider Cluster"
-          className="w-full px-2.5 py-1.5 rounded-md border border-border bg-bg text-text font-mono text-[0.82rem] focus:outline-none focus:border-accent"
+          className="w-full px-2.5 py-1.5 rounded-lg border border-border bg-bg text-text font-mono text-[0.82rem] focus:outline-none focus:border-accent"
         />
       </div>
       <div className="mb-3">
@@ -179,7 +179,7 @@ function CreateAlertModal({
         <select
           value={alertType}
           onChange={(e) => setAlertType(e.target.value)}
-          className="w-full px-2.5 py-1.5 rounded-md border border-border bg-bg text-text font-mono text-[0.82rem] focus:outline-none focus:border-accent"
+          className="w-full px-2.5 py-1.5 rounded-lg border border-border bg-bg text-text text-[0.82rem] focus:outline-none focus:border-accent"
         >
           <option value="insider_cluster">Insider Buying Cluster</option>
           <option value="price_above">Price Above</option>
@@ -195,7 +195,7 @@ function CreateAlertModal({
           value={ticker}
           onChange={(e) => setTicker(e.target.value)}
           placeholder="e.g. NVDA"
-          className="w-full px-2.5 py-1.5 rounded-md border border-border bg-bg text-text font-mono text-[0.82rem] focus:outline-none focus:border-accent"
+          className="w-full px-2.5 py-1.5 rounded-lg border border-border bg-bg text-text font-mono text-[0.82rem] focus:outline-none focus:border-accent"
         />
       </div>
       <div className="mb-3">
@@ -206,19 +206,19 @@ function CreateAlertModal({
           value={threshold}
           onChange={(e) => setThreshold(e.target.value)}
           placeholder="e.g. 150.00"
-          className="w-full px-2.5 py-1.5 rounded-md border border-border bg-bg text-text font-mono text-[0.82rem] focus:outline-none focus:border-accent"
+          className="w-full px-2.5 py-1.5 rounded-lg border border-border bg-bg text-text font-mono text-[0.82rem] focus:outline-none focus:border-accent"
         />
       </div>
       <div className="flex gap-2 justify-end mt-4">
         <button
           onClick={onClose}
-          className="px-3.5 py-1.5 rounded-md border border-border bg-surface text-text font-mono text-[0.82rem] font-semibold cursor-pointer hover:bg-surface-hover"
+          className="px-3.5 py-1.5 rounded-lg border border-border bg-surface text-text text-[0.82rem] font-semibold cursor-pointer hover:bg-surface-hover"
         >
           Cancel
         </button>
         <button
           onClick={handleSave}
-          className="px-3.5 py-1.5 rounded-md border border-accent bg-accent text-white font-mono text-[0.82rem] font-semibold cursor-pointer hover:opacity-85"
+          className="px-3.5 py-1.5 rounded-lg border border-accent bg-accent text-bg text-[0.82rem] font-semibold cursor-pointer hover:opacity-85"
         >
           Create
         </button>

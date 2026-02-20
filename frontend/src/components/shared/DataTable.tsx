@@ -45,14 +45,14 @@ export function DataTable<T>({ columns, data, getKey }: Props<T>) {
   }
 
   return (
-    <table className="w-full border-collapse text-[0.82rem]">
+    <table className="w-full border-collapse text-[0.82rem] font-mono">
       <thead>
         <tr>
           {columns.map((col) => (
             <th
               key={col.key}
               onClick={() => handleSort(col.key)}
-              className="text-left px-3 py-2 border-b-2 border-border text-text-muted font-bold text-[0.72rem] uppercase tracking-wider cursor-pointer select-none whitespace-nowrap hover:text-accent"
+              className="text-left px-3 py-2 border-b border-border text-text-muted font-semibold text-[0.72rem] uppercase tracking-wider cursor-pointer select-none whitespace-nowrap hover:text-accent font-sans"
             >
               {col.label}
               {sortKey === col.key && (
@@ -64,7 +64,7 @@ export function DataTable<T>({ columns, data, getKey }: Props<T>) {
       </thead>
       <tbody>
         {sorted.map((row, i) => (
-          <tr key={getKey ? getKey(row, i) : i} className="hover:[&>td]:bg-surface-hover">
+          <tr key={getKey ? getKey(row, i) : i} className="hover:[&>td]:bg-surface-hover transition-colors">
             {columns.map((col) => (
               <td key={col.key} className="px-3 py-1.5 border-b border-border whitespace-nowrap">
                 {col.render ? col.render(row) : String((row as Record<string, unknown>)[col.key] ?? '')}

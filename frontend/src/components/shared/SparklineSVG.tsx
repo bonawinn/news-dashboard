@@ -5,7 +5,7 @@ interface Props {
   color?: string
 }
 
-export function SparklineSVG({ data, width = 80, height = 24, color = '#6c8cff' }: Props) {
+export function SparklineSVG({ data, width = 80, height = 24, color = '#33E29A' }: Props) {
   if (!data || data.length < 2) {
     return <svg width={width} height={height} />
   }

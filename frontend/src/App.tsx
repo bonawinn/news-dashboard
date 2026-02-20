@@ -60,7 +60,7 @@ export default function App() {
         style={{ marginLeft: collapsed ? 0 : 220 }}
       >
         <Header title={TITLES[active]} onToggleSidebar={handleToggle} />
-        <main className="px-5 py-4 pb-10 max-w-[1200px] mx-auto">
+        <main className="px-6 py-5 pb-12 max-w-[1200px] mx-auto">
           <PageComponent />
         </main>
       </div>

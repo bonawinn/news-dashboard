@@ -1,21 +1,24 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #0f1118;
-  --color-surface: #1a1d2e;
-  --color-surface-hover: #232740;
-  --color-border: #2a2e45;
-  --color-text: #e4e6f0;
-  --color-text-muted: #8b8fa8;
-  --color-accent: #6c8cff;
-  --color-accent-dim: rgba(108, 140, 255, 0.15);
-  --color-green: #34d399;
-  --color-red: #f87171;
-  --color-yellow: #fbbf24;
-  --color-green-bg: rgba(52, 211, 153, 0.12);
-  --color-red-bg: rgba(248, 113, 113, 0.12);
+  --color-bg: #070707;
+  --color-surface: #141414;
+  --color-surface-hover: #1e1e1e;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-text: #eaeaea;
+  --color-text-muted: #b6b6b6;
+  --color-accent: #33E29A;
+  --color-accent-dim: rgba(51, 226, 154, 0.08);
+  --color-amber: #E9B86E;
+  --color-amber-dim: rgba(233, 184, 110, 0.12);
+  --color-green: #33E29A;
+  --color-red: #ef4444;
+  --color-yellow: #E9B86E;
+  --color-green-bg: rgba(51, 226, 154, 0.08);
+  --color-red-bg: rgba(239, 68, 68, 0.08);
 
   --font-mono: "SF Mono", "Fira Code", "Cascadia Code", Menlo, Consolas, monospace;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 /* Base reset & body */
@@ -26,11 +29,13 @@
 }
 
 body {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.5;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -41,4 +46,9 @@ body {
 /* Spinner animation */
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* Radial gradient card utility */
+.card-gradient {
+  background: radial-gradient(140% 120% at 10% 0%, #141414 0%, #0b0b0b 60%, #070707 100%);
 }

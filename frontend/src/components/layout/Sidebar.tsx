@@ -27,7 +27,7 @@ export function Sidebar({ active, collapsed, mobileOpen, onNavigate }: Props) {
 
   return (
     <nav
-      className="fixed top-0 left-0 w-[220px] h-screen bg-surface border-r border-border flex flex-col z-[200] transition-transform duration-200 max-md:translate-x-[-220px]"
+      className="fixed top-0 left-0 w-[220px] h-screen bg-[#0a0a0a] border-r border-border flex flex-col z-[200] transition-transform duration-200 max-md:translate-x-[-220px]"
       style={{ transform }}
     >
       <div className="px-4 py-4 border-b border-border flex items-center gap-2.5">
@@ -40,9 +40,9 @@ export function Sidebar({ active, collapsed, mobileOpen, onNavigate }: Props) {
           <li key={item.key}>
             <button
               onClick={() => onNavigate(item.key)}
-              className={`w-full flex items-center gap-2.5 px-4 py-2.5 border-none bg-transparent font-mono text-[0.82rem] font-semibold cursor-pointer transition-all text-left ${
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 border-none bg-transparent text-[0.82rem] font-semibold cursor-pointer transition-all text-left ${
                 active === item.key
-                  ? 'bg-accent-dim text-accent border-r-2 border-r-accent'
+                  ? 'bg-accent-dim text-accent border-r-2 border-r-accent shadow-[inset_0_0_20px_rgba(51,226,154,0.05)]'
                   : 'text-text-muted hover:bg-surface-hover hover:text-text'
               }`}
             >
@@ -54,7 +54,7 @@ export function Sidebar({ active, collapsed, mobileOpen, onNavigate }: Props) {
       </ul>
 
       <div className="px-4 py-3 border-t border-border">
-        <span className="text-[0.7rem] text-text-muted">v2.0 React</span>
+        <span className="text-[0.7rem] text-amber font-medium">v2.0 React</span>
       </div>
     </nav>
   )
