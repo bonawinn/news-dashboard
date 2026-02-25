@@ -4,6 +4,7 @@ import { useDebounce } from '../hooks/useDebounce.ts'
 import { useInterval } from '../hooks/useInterval.ts'
 import { SentimentBadge } from '../components/shared/SentimentBadge.tsx'
 import { Spinner } from '../components/shared/Spinner.tsx'
+import { TickerLink } from '../components/shared/TickerLink.tsx'
 import type { Article } from '../types/api.ts'
 
 const AUTO_REFRESH_MS = 5 * 60 * 1000
@@ -225,6 +226,13 @@ export function NewsPage() {
                 {art.title}
               </a>
             </span>
+            {art.tickers && art.tickers.length > 0 && (
+              <span className="shrink-0 flex gap-1">
+                {art.tickers.slice(0, 3).map((t) => (
+                  <TickerLink key={t} ticker={t} />
+                ))}
+              </span>
+            )}
             {art.sentiment && <SentimentBadge sentiment={art.sentiment} />}
             {art.age && (
               <span className="shrink-0 text-[0.7rem] text-text-muted whitespace-nowrap font-mono">

@@ -1,53 +1,72 @@
 import { useState, useEffect, useCallback } from 'react'
-import { getTemplates, runScreen, runTemplate } from '../api/screener.ts'
-import { FilterGrid } from '../components/shared/FilterGrid.tsx'
-import type { FilterDef } from '../components/shared/FilterGrid.tsx'
+import { getTemplates, runScreenAdvanced, runTemplate, getFilterOptions } from '../api/screener.ts'
+import { SCREENER_CATEGORIES } from '../config/screenerFilters.ts'
+import { AdvancedFilterPanel } from '../components/shared/AdvancedFilterPanel.tsx'
+import { ColumnSelector } from '../components/shared/ColumnSelector.tsx'
 import { DataTable } from '../components/shared/DataTable.tsx'
 import type { Column } from '../components/shared/DataTable.tsx'
-import { SetupBox } from '../components/shared/SetupBox.tsx'
 import { Spinner } from '../components/shared/Spinner.tsx'
-import { formatNumber, formatUSD, colorClass } from '../utils/format.ts'
-import type { ScreenerTemplate, ScreenerRow } from '../types/api.ts'
+import { TickerLink } from '../components/shared/TickerLink.tsx'
+import { formatNumber, formatPct, formatUSD, colorClass } from '../utils/format.ts'
+import type { ScreenerTemplate, ScreenerRow, FilterOptionsResponse } from '../types/api.ts'
 
-const FILTER_DEFS: FilterDef[] = [
-  { key: 'roe_min', label: 'ROE Min (%)' },
-  { key: 'pe_max', label: 'P/E Max' },
-  { key: 'pb_max', label: 'P/B Max' },
-  { key: 'debt_equity_max', label: 'Debt/Equity Max' },
-  { key: 'market_cap_min', label: 'Mkt Cap Min ($)' },
-  { key: 'dividend_yield_min', label: 'Div Yield Min (%)' },
-  { key: 'payout_ratio_max', label: 'Payout Max (%)' },
-  { key: 'revenue_growth_min', label: 'Rev Growth Min (%)' },
-  { key: 'gross_margin_min', label: 'Gross Margin Min (%)' },
-  { key: '52w_change_min', label: '52W Change Min (%)' },
-]
-
-const COLUMNS: Column<ScreenerRow>[] = [
-  { key: 'ticker', label: 'Ticker', type: 'str', render: (r) => <span className="text-accent font-semibold">{r.ticker}</span> },
+const ALL_COLUMNS: { key: string; label: string; type: 'str' | 'num'; render?: (r: ScreenerRow) => React.ReactNode }[] = [
+  { key: 'ticker', label: 'Ticker', type: 'str', render: (r) => <TickerLink ticker={r.ticker} /> },
   { key: 'name', label: 'Name', type: 'str' },
   { key: 'price', label: 'Price', type: 'num', render: (r) => <>{formatNumber(r.price)}</> },
-  { key: 'pe_ratio', label: 'P/E', type: 'num', render: (r) => <span className={colorClass(r.pe_ratio)}>{formatNumber(r.pe_ratio)}</span> },
-  { key: 'pb_ratio', label: 'P/B', type: 'num', render: (r) => <span className={colorClass(r.pb_ratio)}>{formatNumber(r.pb_ratio)}</span> },
-  { key: 'roe', label: 'ROE%', type: 'num', render: (r) => <span className={colorClass(r.roe)}>{formatNumber(r.roe)}</span> },
-  { key: 'dividend_yield', label: 'Div%', type: 'num', render: (r) => <>{formatNumber(r.dividend_yield)}</> },
+  { key: 'sector', label: 'Sector', type: 'str' },
+  { key: 'industry', label: 'Industry', type: 'str' },
   { key: 'market_cap', label: 'Mkt Cap', type: 'num', render: (r) => <>{formatUSD(r.market_cap)}</> },
-  { key: '52w_change', label: '52W%', type: 'num', render: (r) => <span className={colorClass(r['52w_change'])}>{formatNumber(r['52w_change'])}</span> },
+  { key: 'pe_ratio', label: 'P/E', type: 'num', render: (r) => <span className={colorClass(r.pe_ratio)}>{formatNumber(r.pe_ratio)}</span> },
+  { key: 'forward_pe', label: 'Fwd P/E', type: 'num', render: (r) => <>{formatNumber(r.forward_pe)}</> },
+  { key: 'peg_ratio', label: 'PEG', type: 'num', render: (r) => <>{formatNumber(r.peg_ratio)}</> },
+  { key: 'pb_ratio', label: 'P/B', type: 'num', render: (r) => <>{formatNumber(r.pb_ratio)}</> },
+  { key: 'price_to_sales', label: 'P/S', type: 'num', render: (r) => <>{formatNumber(r.price_to_sales)}</> },
+  { key: 'ev_to_ebitda', label: 'EV/EBITDA', type: 'num', render: (r) => <>{formatNumber(r.ev_to_ebitda)}</> },
+  { key: 'roe', label: 'ROE%', type: 'num', render: (r) => <span className={colorClass(r.roe)}>{formatPct(r.roe)}</span> },
+  { key: 'roa', label: 'ROA%', type: 'num', render: (r) => <span className={colorClass(r.roa)}>{formatPct(r.roa)}</span> },
+  { key: 'gross_margin', label: 'Gross M%', type: 'num', render: (r) => <>{formatPct(r.gross_margin)}</> },
+  { key: 'operating_margin', label: 'Oper M%', type: 'num', render: (r) => <>{formatPct(r.operating_margin)}</> },
+  { key: 'net_margin', label: 'Net M%', type: 'num', render: (r) => <>{formatPct(r.net_margin)}</> },
+  { key: 'dividend_yield', label: 'Div%', type: 'num', render: (r) => <>{formatPct(r.dividend_yield)}</> },
+  { key: 'debt_to_equity', label: 'D/E', type: 'num', render: (r) => <>{formatNumber(r.debt_to_equity)}</> },
+  { key: 'current_ratio', label: 'Curr Ratio', type: 'num', render: (r) => <>{formatNumber(r.current_ratio)}</> },
+  { key: 'revenue_growth', label: 'Rev Grw%', type: 'num', render: (r) => <span className={colorClass(r.revenue_growth)}>{formatPct(r.revenue_growth)}</span> },
+  { key: 'earnings_growth', label: 'Earn Grw%', type: 'num', render: (r) => <span className={colorClass(r.earnings_growth)}>{formatPct(r.earnings_growth)}</span> },
+  { key: 'beta', label: 'Beta', type: 'num', render: (r) => <>{formatNumber(r.beta)}</> },
+  { key: '52w_change', label: '52W%', type: 'num', render: (r) => <span className={colorClass(r['52w_change'])}>{formatPct(r['52w_change'])}</span> },
+  { key: 'avg_volume', label: 'Avg Vol', type: 'num', render: (r) => <>{formatNumber(r.avg_volume, 0)}</> },
+  { key: 'relative_volume', label: 'Rel Vol', type: 'num', render: (r) => <>{formatNumber(r.relative_volume)}</> },
+  { key: 'rsi', label: 'RSI', type: 'num', render: (r) => <>{formatNumber(r.rsi)}</> },
+  { key: 'sma20_dist', label: 'SMA20%', type: 'num', render: (r) => <span className={colorClass(r.sma20_dist)}>{formatPct(r.sma20_dist)}</span> },
+  { key: 'sma50_dist', label: 'SMA50%', type: 'num', render: (r) => <span className={colorClass(r.sma50_dist)}>{formatPct(r.sma50_dist)}</span> },
+  { key: 'sma200_dist', label: 'SMA200%', type: 'num', render: (r) => <span className={colorClass(r.sma200_dist)}>{formatPct(r.sma200_dist)}</span> },
+  { key: 'volatility', label: 'Vol%', type: 'num', render: (r) => <>{formatPct(r.volatility)}</> },
+  { key: 'change_pct', label: 'Chg%', type: 'num', render: (r) => <span className={colorClass(r.change_pct)}>{formatPct(r.change_pct)}</span> },
+  { key: 'short_float', label: 'Short%', type: 'num', render: (r) => <>{formatPct(r.short_float)}</> },
+  { key: 'insider_pct', label: 'Insider%', type: 'num', render: (r) => <>{formatPct(r.insider_pct)}</> },
+  { key: 'institutional_pct', label: 'Inst%', type: 'num', render: (r) => <>{formatPct(r.institutional_pct)}</> },
 ]
+
+const DEFAULT_VISIBLE = ['ticker', 'name', 'price', 'sector', 'market_cap', 'pe_ratio', 'roe', 'dividend_yield', '52w_change']
 
 export function ScreenerPage() {
   const [templates, setTemplates] = useState<Record<string, ScreenerTemplate>>({})
   const [selectedTemplate, setSelectedTemplate] = useState('')
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
+  const [filterOptions, setFilterOptions] = useState<FilterOptionsResponse | null>(null)
   const [results, setResults] = useState<ScreenerRow[]>([])
+  const [visibleCols, setVisibleCols] = useState<string[]>(DEFAULT_VISIBLE)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [statusText, setStatusText] = useState<string | null>(null)
-  const [notImplemented, setNotImplemented] = useState<string | null>(null)
 
-  // Fetch templates on mount
   useEffect(() => {
     getTemplates()
       .then((data) => setTemplates(data.templates || {}))
+      .catch(() => {})
+    getFilterOptions()
+      .then((data) => setFilterOptions(data))
       .catch(() => {})
   }, [])
 
@@ -70,7 +89,6 @@ export function ScreenerPage() {
   const doRun = useCallback(async () => {
     setLoading(true)
     setError(null)
-    setNotImplemented(null)
     setResults([])
 
     try {
@@ -78,25 +96,34 @@ export function ScreenerPage() {
       if (selectedTemplate && templates[selectedTemplate]) {
         data = await runTemplate(selectedTemplate)
       } else {
-        const params: Record<string, string> = {}
+        // Build filter object for POST
+        const filters: Record<string, unknown> = {}
         for (const [k, v] of Object.entries(filterValues)) {
-          if (v !== '') params[k] = v
+          if (v === '') continue
+          // Try to convert to number for numeric filters
+          const num = Number(v)
+          filters[k] = isNaN(num) ? v : num
         }
-        data = await runScreen(params)
+        data = await runScreenAdvanced(filters)
       }
       if (data.error) throw new Error(data.error)
-      if (data.status === 'not_implemented') {
-        setNotImplemented(data.message || '')
-      } else {
-        setResults(data.results || [])
-        setStatusText(`${(data.results || []).length} stocks found`)
-      }
+      setResults(data.results || [])
+      setStatusText(`${(data.results || []).length} stocks found out of ${data.total_screened || '?'} screened`)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error')
     } finally {
       setLoading(false)
     }
   }, [selectedTemplate, templates, filterValues])
+
+  function handleClearFilters() {
+    setFilterValues({})
+    setSelectedTemplate('')
+  }
+
+  const columns: Column<ScreenerRow>[] = ALL_COLUMNS
+    .filter((c) => visibleCols.includes(c.key))
+    .map((c) => ({ key: c.key, label: c.label, type: c.type, render: c.render }))
 
   return (
     <>
@@ -119,10 +146,28 @@ export function ScreenerPage() {
         >
           Run Screen
         </button>
+        <button
+          onClick={handleClearFilters}
+          className="px-3 py-1.5 rounded-lg border border-border bg-surface text-text-muted text-[0.82rem] cursor-pointer hover:bg-surface-hover hover:text-text"
+        >
+          Clear
+        </button>
+        <div className="ml-auto">
+          <ColumnSelector
+            columns={ALL_COLUMNS.map((c) => ({ key: c.key, label: c.label }))}
+            visible={visibleCols}
+            onChange={setVisibleCols}
+          />
+        </div>
       </div>
 
-      {/* Filters */}
-      <FilterGrid filters={FILTER_DEFS} values={filterValues} onChange={handleFilterChange} />
+      {/* Advanced Filters */}
+      <AdvancedFilterPanel
+        categories={SCREENER_CATEGORIES}
+        values={filterValues}
+        onChange={handleFilterChange}
+        filterOptions={filterOptions}
+      />
 
       {/* Status */}
       {loading && (
@@ -136,13 +181,10 @@ export function ScreenerPage() {
       )}
 
       {/* Results */}
-      {notImplemented !== null && (
-        <SetupBox title="Coming Soon"><p>{notImplemented}</p></SetupBox>
-      )}
       {!loading && results.length > 0 && (
-        <DataTable columns={COLUMNS} data={results} getKey={(r) => r.ticker} />
+        <DataTable columns={columns} data={results} getKey={(r) => r.ticker} />
       )}
-      {!loading && !error && !notImplemented && results.length === 0 && statusText && (
+      {!loading && !error && results.length === 0 && statusText && (
         <p className="text-text-muted text-center">No stocks match filters.</p>
       )}
     </>

@@ -1,4 +1,5 @@
 export type Section = 'news' | 'financials' | 'screener' | 'insiders' | 'macro' | 'alerts'
+export type AppView = Section | 'company'
 
 interface NavItem {
   key: Section
@@ -16,7 +17,7 @@ const NAV_ITEMS: NavItem[] = [
 ]
 
 interface Props {
-  active: Section
+  active: AppView
   collapsed: boolean
   mobileOpen: boolean
   onNavigate: (section: Section) => void

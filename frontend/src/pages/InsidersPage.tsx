@@ -3,6 +3,7 @@ import { getTrades, getClusters } from '../api/insiders.ts'
 import { SetupBox } from '../components/shared/SetupBox.tsx'
 import { Spinner } from '../components/shared/Spinner.tsx'
 import { formatNumber, formatUSD } from '../utils/format.ts'
+import { TickerLink } from '../components/shared/TickerLink.tsx'
 import type { InsiderTrade, InsiderCluster } from '../types/api.ts'
 
 export function InsidersPage() {
@@ -136,7 +137,7 @@ export function InsidersPage() {
             {trades.map((t, i) => (
               <tr key={i} className="hover:[&>td]:bg-surface-hover transition-colors">
                 <td className="px-3 py-1.5 border-b border-border whitespace-nowrap">{t.filing_date || ''}</td>
-                <td className="px-3 py-1.5 border-b border-border whitespace-nowrap text-accent font-semibold">{t.ticker || ''}</td>
+                <td className="px-3 py-1.5 border-b border-border whitespace-nowrap">{t.ticker ? <TickerLink ticker={t.ticker} /> : ''}</td>
                 <td className="px-3 py-1.5 border-b border-border whitespace-nowrap font-sans">{t.insider_name || ''}</td>
                 <td className="px-3 py-1.5 border-b border-border whitespace-nowrap text-text-muted font-sans">{t.title || ''}</td>
                 <td className={`px-3 py-1.5 border-b border-border whitespace-nowrap ${isBuy(t.trade_type || '') ? 'text-green' : 'text-red'}`}>
@@ -160,7 +161,7 @@ export function InsidersPage() {
           {clusters.map((c, ci) => (
             <div key={ci} className="card-gradient border border-border rounded-[14px] p-4 mb-3 shadow-[0_12px_30px_rgba(0,0,0,0.45)]">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-base font-bold text-accent">{c.ticker}</span>
+                <span className="text-base font-bold"><TickerLink ticker={c.ticker} /></span>
                 <span className="text-[0.75rem] bg-green-bg text-green px-2.5 py-0.5 rounded-full font-bold">
                   {c.insider_count} insiders buying
                 </span>

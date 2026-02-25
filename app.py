@@ -15,6 +15,7 @@ def create_app():
     from blueprints.insiders_bp import insiders_bp
     from blueprints.macro_bp import macro_bp
     from blueprints.alerts_bp import alerts_bp
+    from blueprints.company_bp import company_bp
 
     app.register_blueprint(news_bp)
     app.register_blueprint(financials_bp)
@@ -22,6 +23,7 @@ def create_app():
     app.register_blueprint(insiders_bp)
     app.register_blueprint(macro_bp)
     app.register_blueprint(alerts_bp)
+    app.register_blueprint(company_bp)
 
     react_dir = os.path.join(app.static_folder, "react")
 
@@ -37,4 +39,4 @@ def create_app():
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host='127.0.0.1', port=5050)

@@ -26,6 +26,7 @@ FINANCIAL_CACHE_TTL = 3600 # 1 hour
 SCREENER_CACHE_TTL = 900   # 15 minutes
 INSIDER_CACHE_TTL = 1800   # 30 minutes
 MACRO_CACHE_TTL = 3600     # 1 hour
+DETAIL_CACHE_TTL = 300     # 5 minutes
 
 # --- FRED Series ---
 FRED_SERIES = {

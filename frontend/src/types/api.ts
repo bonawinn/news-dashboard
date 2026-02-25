@@ -83,19 +83,83 @@ export interface ScreenerRow {
   name: string
   price?: number
   pe_ratio?: number
+  forward_pe?: number
+  peg_ratio?: number
   pb_ratio?: number
+  price_to_sales?: number
+  ev_to_ebitda?: number
+  ev_to_revenue?: number
+  eps_trailing?: number
   roe?: number
+  roa?: number
+  gross_margin?: number
+  operating_margin?: number
+  net_margin?: number
+  debt_to_equity?: number
+  current_ratio?: number
+  quick_ratio?: number
   dividend_yield?: number
+  payout_ratio?: number
+  revenue_growth?: number
+  earnings_growth?: number
+  insider_pct?: number
+  institutional_pct?: number
+  short_ratio?: number
+  short_float?: number
   market_cap?: number
   '52w_change'?: number
+  beta?: number
+  exchange?: string
+  sector?: string
+  industry?: string
+  avg_volume?: number
+  current_volume?: number
+  relative_volume?: number
+  analyst_recommendation?: string
+  options_available?: boolean
+  // Technical
+  perf_1w?: number
+  perf_1m?: number
+  perf_3m?: number
+  perf_6m?: number
+  perf_1y?: number
+  volatility?: number
+  rsi?: number
+  sma20?: number
+  sma50?: number
+  sma200?: number
+  sma20_dist?: number
+  sma50_dist?: number
+  sma200_dist?: number
+  gap?: number
+  change_pct?: number
+  atr?: number
+  high_20d_dist?: number
+  low_20d_dist?: number
+  high_52w_dist?: number
+  low_52w_dist?: number
+  [key: string]: unknown
 }
 
 export interface ScreenerResponse {
   results: ScreenerRow[]
   template?: string
+  total_screened?: number
   status?: string
   message?: string
   error?: string
+}
+
+export interface FilterOption {
+  value: string
+  label: string
+}
+
+export interface FilterOptionsResponse {
+  exchanges: string[]
+  sectors: string[]
+  market_cap_presets: string[]
+  recommendations: string[]
 }
 
 export interface InsiderTrade {
@@ -183,5 +247,101 @@ export interface AlertCreatePayload {
 
 export interface TelegramTestResponse {
   message?: string
+  error?: string
+}
+
+// --- Company Detail Types ---
+
+export interface CompanyHeader {
+  price?: number
+  change?: number
+  change_pct?: number
+  volume?: number
+  bid?: number
+  bid_size?: number
+  ask?: number
+  ask_size?: number
+  day_low?: number
+  day_high?: number
+  fifty_two_week_low?: number
+  fifty_two_week_high?: number
+}
+
+export interface CompanyOverview {
+  name: string
+  address?: string
+  website?: string
+  description?: string
+  sector?: string
+  industry?: string
+  logo_url?: string
+  employees?: number
+  ceo?: string
+}
+
+export interface CompanySnapshot {
+  market_info: {
+    exchange?: string
+    currency?: string
+    float_shares?: number
+    shares_outstanding?: number
+    market_cap?: number
+  }
+  company_stats: {
+    employees?: number
+    insider_pct?: number
+    institutional_pct?: number
+  }
+  valuation: {
+    trailing_pe?: number
+    forward_pe?: number
+    peg_ratio?: number
+    price_to_sales?: number
+    price_to_book?: number
+    ev_to_ebitda?: number
+    ev_to_revenue?: number
+    enterprise_value?: number
+  }
+  dividends: {
+    dividend_yield?: number
+    trailing_annual_yield?: number
+    payout_ratio?: number
+    ex_dividend_date?: string
+  }
+  risk: {
+    beta?: number
+    short_pct_of_float?: number
+    short_ratio?: number
+  }
+}
+
+export interface PeriodStatements {
+  _periods?: string[]
+  [key: string]: number[] | string[] | null[] | undefined
+}
+
+export interface CompanyStatements {
+  income: { yearly: PeriodStatements; quarterly: PeriodStatements }
+  balance: { yearly: PeriodStatements; quarterly: PeriodStatements }
+  cashflow: { yearly: PeriodStatements; quarterly: PeriodStatements }
+}
+
+export interface AnalystEstimates {
+  target_low?: number
+  target_mean?: number
+  target_median?: number
+  target_high?: number
+  recommendation?: string
+  recommendation_mean?: number
+  num_analysts?: number
+}
+
+export interface CompanyDetailResponse {
+  ticker: string
+  header: CompanyHeader
+  overview: CompanyOverview
+  snapshot: CompanySnapshot
+  statements: CompanyStatements
+  estimates: AnalystEstimates
   error?: string
 }

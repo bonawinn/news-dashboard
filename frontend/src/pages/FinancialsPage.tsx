@@ -4,6 +4,7 @@ import { MetricCard } from '../components/shared/MetricCard.tsx'
 import { TabBar } from '../components/shared/TabBar.tsx'
 import { SetupBox } from '../components/shared/SetupBox.tsx'
 import { Spinner } from '../components/shared/Spinner.tsx'
+import { TickerLink } from '../components/shared/TickerLink.tsx'
 import { formatNumber, formatPct, formatUSD, colorClass } from '../utils/format.ts'
 import type { FinancialLookupResponse, CompareResponse, StatementData } from '../types/api.ts'
 
@@ -133,7 +134,7 @@ export function FinancialsPage() {
           <SetupBox title="Coming Soon"><p>{lookupData.message || ''}</p></SetupBox>
         ) : (
           <>
-            <h3 className="mb-3 font-bold">{lookupData.ticker} Key Metrics</h3>
+            <h3 className="mb-3 font-bold"><TickerLink ticker={lookupData.ticker} /> Key Metrics</h3>
             <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-2.5 mb-5">
               {METRIC_DEFS.map(([label, fn]) => (
                 <MetricCard key={label} label={label} value={fn(lookupData.metrics as Record<string, number | undefined>)} />
